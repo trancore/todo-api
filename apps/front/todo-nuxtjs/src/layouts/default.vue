@@ -1,12 +1,7 @@
 ﻿<script setup lang="ts">
-type Props = {
-  openedMenu: boolean;
-  openedTodoDetailModal: boolean;
-  openedTodoEditModal: boolean;
-};
-
-const { openedMenu, openedTodoDetailModal, openedTodoEditModal } =
-  defineProps<Props>();
+const openedMenu = false;
+const openedTodoDetailModal = false;
+const openedTodoEditModal = false;
 
 const todo1 = {
   title: 'test',

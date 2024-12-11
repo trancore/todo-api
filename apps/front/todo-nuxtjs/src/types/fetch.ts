@@ -34,7 +34,7 @@ type OpenApiFetchQuery<
   Paths extends Record<string, any>,
   Path extends keyof Paths,
   Method extends keyof Paths[Path],
-> = Paths[Path][Method]['parameters']['path'] extends infer Query
+> = Paths[Path][Method]['parameters']['query'] extends infer Query
   ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Query extends Record<string, any>
     ? { query: Query }

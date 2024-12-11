@@ -22,5 +22,14 @@ export default defineNuxtConfig({
   svgo: {
     defaultImport: 'component',
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
+  },
   compatibilityDate: '2024-09-21',
 });

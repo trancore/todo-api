@@ -128,7 +128,16 @@ tailwindCSSやMaterialUIなど何らかのCSSフレームワークを使って�
 
 React-Hooks-Form と yup の実装は、[src/pages/register/index.tsx](/apps/front/todo-nextjs/src/pages/register/index.tsx)を参考にしてください。 --> -->
 
-##### Pinia による状態管理
+##### [Pinia](https://pinia.vuejs.org/introduction.html)による状態管理
+
+Nuxt.jsでは、状態管理ライブラリに[Pinia](https://nuxt.com/docs/getting-started/state-management#usage-with-pinia)を紹介しています。
+
+Pniaはcomposition APIと親和性が高く、component/page間でグローバルにデータを保持することができます。また、SSSにも対応しており、fetchと組み合わせることで、キャッシュを実現することも可能です。
+
+Piniaによる状態管理の実装は簡単です。  
+storesディレクトリに各storeごとのファイルを作成し、そのファイルにstoreを定義していきます。状態を持つロジックという意味では`composables`として定義してしまうかもしれませんが、このロジックはあくまでも状態を変えるためにのみ使われるのでstoreとして定義した方が良いかと思います。
+storeの定義には、保持する状態である`state`と、その状態に対してどのような操作を行うのかを`actions`を定義します。  
+状態を使用したい場合は、component/pageでcomposable APIのようにstoreを呼び出します。
 
 <!-- [Redux](https://redux.js.org/introduction/getting-started)は以下のデータフローによって状態を管理しています。
 

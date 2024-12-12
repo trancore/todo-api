@@ -14,13 +14,16 @@ export default defineNuxtConfig({
   devServer: {
     port: 3001,
   },
-  modules: ['@nuxt/eslint', 'nuxt-svgo'],
+  modules: ['@nuxt/eslint', 'nuxt-svgo', '@pinia/nuxt'],
   css: ['sanitize.css'],
   eslint: {
     config: {},
   },
   svgo: {
     defaultImport: 'component',
+  },
+  pinia: {
+    storesDirs: ['./src/store/**'],
   },
   vite: {
     css: {

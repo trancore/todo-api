@@ -132,30 +132,12 @@ React-Hooks-Form と yup の実装は、[src/pages/register/index.tsx](/apps/fro
 
 Nuxt.jsでは、状態管理ライブラリに[Pinia](https://nuxt.com/docs/getting-started/state-management#usage-with-pinia)を紹介しています。
 
-Pniaはcomposition APIと親和性が高く、component/page間でグローバルにデータを保持することができます。また、SSSにも対応しており、fetchと組み合わせることで、キャッシュを実現することも可能です。
+Pniaはcomposition APIと親和性が高く、component/page間でグローバルにデータを保持することができます。また、SSRにも対応しており、fetchと組み合わせることで、キャッシュを実現することも可能です。
 
 Piniaによる状態管理の実装は簡単です。  
 storesディレクトリに各storeごとのファイルを作成し、そのファイルにstoreを定義していきます。状態を持つロジックという意味では`composables`として定義してしまうかもしれませんが、このロジックはあくまでも状態を変えるためにのみ使われるのでstoreとして定義した方が良いかと思います。
 storeの定義には、保持する状態である`state`と、その状態に対してどのような操作を行うのかを`actions`を定義します。  
 状態を使用したい場合は、component/pageでcomposable APIのようにstoreを呼び出します。
-
-<!-- [Redux](https://redux.js.org/introduction/getting-started)は以下のデータフローによって状態を管理しています。
-
-![データフロー図](https://redux.js.org/assets/images/ReduxDataFlowDiagram-49fa8c3968371d9ef6f2a1486bd40a26.gif)
-
-詳しい説明は公式ドキュメントを参考していただきたいですが、
-
-1. 何らかのイベントなどによって
-2. Dispatch を呼び出し
-3. Action によって、どのような Store の更新を行うかを選択し
-4. Reducer で Store の内容を更新し、
-5. 各画面(UI)で取得している Store 情報が更新される
-
-かと思います。
-
-現在の Redux では、`slice`によって`state`, `reducer`, `action`を定義してしまいます（[定義の例](/apps/front/todo-nextjs/src/features)）。これらを`reducer`として`Store`に登録しています（[登録の例](/apps/front/todo-nextjs/src/store/root.ts)）。
-
-そして、上記で定義した`Store`や`State`の情報を型情報として持つために、`dispatch`, `Store`を取得するための`hooks`を作成しています（[hooks の例](/apps/front/todo-nextjs/src/hooks/useRedux.ts)）。 -->
 
 ##### fetch とキャッシュ保持
 

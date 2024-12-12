@@ -1,16 +1,10 @@
 <script setup lang="ts">
-const todoList = [
-  {
-    id: 1,
-    userId: 1,
-    title: 'title',
-    description: 'description',
-    deadlineAt: '2024-10-11',
-    status: 'TODO',
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01',
+const { data: todoList } = await useApiClient('/todos', {
+  method: 'get',
+  query: {
+    status: 'WIP,TODO',
   },
-];
+});
 
 const uncheck = {
   has: true,

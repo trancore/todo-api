@@ -5,21 +5,12 @@ const { toggle } = useMenuStore();
 
 const isSignin = ref(true);
 const hasPlusIcon = ref(true);
-
-function onClickMenuIcon() {
-  toggle();
-}
 </script>
 
 <template>
   <header class="header">
     <template v-if="isSignin">
-      <Icon
-        name="Menu"
-        color="#000000"
-        :size="64"
-        :click-icon="onClickMenuIcon"
-      />
+      <Icon name="Menu" color="#000000" :size="64" :click-icon="toggle" />
       <NuxtLink :to="PAGE_PATH.TOP">
         <Icon name="UserCircle" color="#000000" :size="64" />
       </NuxtLink>

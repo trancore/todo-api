@@ -49,6 +49,7 @@ const hasClickIcon = !!clickIcon;
     :width="size"
     :fill="color"
     :stroke="color"
+    @click="clickIcon"
   />
 </template>
 

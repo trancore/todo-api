@@ -16,7 +16,7 @@ defineProps<Props>();
       </div>
       <div class="menu-content-box">
         <div class="menu-content-list">
-          <NuxtLink ref="/completed" :on-click="closeMenu">
+          <NuxtLink href="/completed" @click="closeMenu">
             <h3>完了済TODO</h3>
           </NuxtLink>
         </div>
@@ -30,7 +30,7 @@ defineProps<Props>();
         />
       </div>
     </div>
-    <div id="outer-menu" class="outer-menu" :on-click="closeMenu"></div>
+    <div id="outer-menu" class="outer-menu" @click="closeMenu"></div>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 ﻿<script setup lang="ts">
-const openedMenu = false;
+const menuStore = useMenuStore();
+
 const openedTodoDetailModal = false;
 const openedTodoEditModal = false;
 
@@ -12,15 +13,19 @@ const todo2 = {
   title: 'test',
   description: 'testtesttest',
 };
+
+function closeMenu() {
+  menuStore.toggle();
+}
 </script>
 
 <template>
   <div>
     <Menu
-      v-if="openedMenu"
+      v-if="menuStore.isOpen"
       user-name="username"
       :sign-out="() => {}"
-      :close-menu="() => {}"
+      :close-menu="closeMenu"
     />
     <ModalTodoDetail
       v-if="openedTodoDetailModal"

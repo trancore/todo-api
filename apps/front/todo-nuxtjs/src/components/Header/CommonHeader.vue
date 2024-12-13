@@ -1,10 +1,14 @@
 ﻿<script setup lang="ts">
 import { PAGE_PATH } from '~/constants/page';
 
+const { toggle } = useMenuStore();
+
 const isSignin = ref(true);
 const hasPlusIcon = ref(true);
 
-function onClickMenuIcon() {}
+function onClickMenuIcon() {
+  toggle();
+}
 function onClickPlusIcon() {}
 </script>
 

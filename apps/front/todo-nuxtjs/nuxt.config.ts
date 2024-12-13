@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     port: 3001,
   },
   modules: ['@nuxt/eslint', 'nuxt-svgo', '@pinia/nuxt'],
-  css: ['sanitize.css'],
+  css: ['sanitize.css', '~/assets/css/base.scss'],
   eslint: {
     config: {},
   },

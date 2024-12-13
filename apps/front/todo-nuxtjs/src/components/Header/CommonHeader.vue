@@ -9,7 +9,6 @@ const hasPlusIcon = ref(true);
 function onClickMenuIcon() {
   toggle();
 }
-function onClickPlusIcon() {}
 </script>
 
 <template>
@@ -24,13 +23,9 @@ function onClickPlusIcon() {}
       <NuxtLink :to="PAGE_PATH.TOP">
         <Icon name="UserCircle" color="#000000" :size="64" />
       </NuxtLink>
-      <Icon
-        v-if="hasPlusIcon"
-        name="Plus"
-        color="#000000"
-        :size="64"
-        :click-icon="onClickPlusIcon"
-      />
+      <NuxtLink :to="PAGE_PATH.REGISTER">
+        <Icon v-if="hasPlusIcon" name="Plus" color="#000000" :size="64" />
+      </NuxtLink>
     </template>
     <h1 v-else class="title">todo</h1>
   </header>

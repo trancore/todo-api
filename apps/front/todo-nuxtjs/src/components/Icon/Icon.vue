@@ -55,6 +55,6 @@ const hasClickIcon = !!clickIcon;
 
 <style lang="scss" scoped>
 .icon {
-  cursor: v-bind('hasClickIcon ? "pointer" : "default"');
+  cursor: v-bind('hasClickIcon ? "pointer" : ""');
 }
 </style>

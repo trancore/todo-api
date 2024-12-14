@@ -1,8 +1,6 @@
 ﻿<script setup lang="ts">
 const menuStore = useMenuStore();
-
-const openedTodoDetailModal = false;
-const openedTodoEditModal = false;
+const modalStore = useModalStore();
 
 const todo1 = {
   title: 'test',
@@ -13,22 +11,13 @@ const todo2 = {
   title: 'test',
   description: 'testtesttest',
 };
-
-function closeMenu() {
-  menuStore.toggle();
-}
 </script>
 
 <template>
   <div>
-    <Menu
-      v-if="menuStore.isOpen"
-      user-name="username"
-      :sign-out="() => {}"
-      :close-menu="closeMenu"
-    />
+    <Menu v-if="menuStore.isOpen" user-name="username" :sign-out="() => {}" />
     <ModalTodoDetail
-      v-if="openedTodoDetailModal"
+      v-if="modalStore.isOpenDetail"
       :todo="todo1"
       :locate-completed="true"
       :disabled="{
@@ -42,7 +31,7 @@ function closeMenu() {
       }"
     />
     <ModalTodoEdit
-      v-if="openedTodoEditModal"
+      v-if="modalStore.isOpenEdit"
       :todo="todo2"
       :event="{
         onClickEdit: () => {},

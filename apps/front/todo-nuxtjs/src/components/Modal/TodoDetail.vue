@@ -19,6 +19,8 @@ type Props = {
   };
 };
 
+const modalStore = useModalStore();
+
 const { todo, locateCompleted, disabled, event } = defineProps<Props>();
 const { title, description, deadlineAt } = todo;
 const formattedDeadline = deadlineAt
@@ -27,7 +29,7 @@ const formattedDeadline = deadlineAt
 </script>
 
 <template>
-  <Modal>
+  <Modal :onClickClose="modalStore.toggleDetail">
     <h1>詳細</h1>
     <div class="content">
       <h3>タイトル</h3>

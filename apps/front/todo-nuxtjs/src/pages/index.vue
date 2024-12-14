@@ -5,6 +5,7 @@ const { data: todoList } = await useApiClient('/todos', {
     status: 'WIP,TODO',
   },
 });
+const { toggleDetail } = useModalStore();
 
 const uncheck = {
   has: true,
@@ -30,7 +31,7 @@ const trashCan = {
       <TodoEclipse
         :title="todo.title"
         :description="todo.description"
-        :click="() => {}"
+        :click="toggleDetail"
       />
       <div class="todo-under">
         <div

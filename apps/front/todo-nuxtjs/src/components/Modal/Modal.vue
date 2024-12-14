@@ -1,10 +1,22 @@
-﻿<script setup lang="ts"></script>
+﻿<script setup lang="ts">
+type Props = {
+  onClickClose: () => void;
+};
+
+defineProps<Props>();
+</script>
 
 <template>
   <div class="back-float">
     <div id="modal" class="modal-box">
       <div class="modal-content">
-        <Icon name="Close" class="icon" color="#000000" :size="32" />
+        <Icon
+          name="Close"
+          class="icon"
+          color="#000000"
+          :size="32"
+          :click-icon="onClickClose"
+        />
         <div class="modal-content">
           <slot />
         </div>

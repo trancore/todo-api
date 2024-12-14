@@ -40,7 +40,7 @@ const trashCan = {
           class="todo-deadline-at"
           :style="{ color: colorizeDate(new Date(todo.deadlineAt)) }"
         >
-          {{ todo.deadlineAt }}
+          {{ formatToYyyyMMDd(new Date(todo.deadlineAt)) }}
         </div>
         <p v-else>" "</p>
         <TodoIconBox

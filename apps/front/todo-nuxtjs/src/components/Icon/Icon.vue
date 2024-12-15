@@ -49,11 +49,12 @@ const hasClickIcon = !!clickIcon;
     :width="size"
     :fill="color"
     :stroke="color"
+    @click="clickIcon"
   />
 </template>
 
 <style lang="scss" scoped>
 .icon {
-  cursor: v-bind('hasClickIcon ? "pointer" : "default"');
+  cursor: v-bind('hasClickIcon ? "pointer" : ""');
 }
 </style>

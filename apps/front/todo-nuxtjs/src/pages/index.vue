@@ -1,16 +1,15 @@
 <script setup lang="ts">
-const todoList = [
+const { data: todoList, refresh: refreshTodoList } = await useApiClient(
+  '/todos',
   {
-    id: 1,
-    userId: 1,
-    title: 'title',
-    description: 'description',
-    deadlineAt: '2024-10-11',
-    status: 'TODO',
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01',
+    method: 'get',
+    query: {
+      status: 'WIP,TODO',
+    },
   },
-];
+);
+
+const { toggleDetail } = useModalStore();
 
 const uncheck = {
   has: true,
@@ -18,7 +17,6 @@ const uncheck = {
 };
 const check = {
   has: true,
-  click: () => {},
 };
 const squareEdit = {
   has: true,
@@ -32,27 +30,34 @@ const trashCan = {
 
 <template>
   <div v-if="todoList" class="todo-list">
-    <div v-for="todo in todoList" id="todo" :key="todo.id" class="todo">
+    <div
+      v-for="todo in todoList"
+      :id="String(todo.id)"
+      :key="todo.id"
+      class="todo"
+    >
       <TodoEclipse
         :title="todo.title"
         :description="todo.description"
-        :click="() => {}"
+        :click="toggleDetail"
       />
       <div class="todo-under">
         <div
           v-if="todo.deadlineAt"
-          id="todo-deadline"
+          :id="`todo-deadline-${todo.id}`"
           class="todo-deadline-at"
           :style="{ color: colorizeDate(new Date(todo.deadlineAt)) }"
         >
-          {{ todo.deadlineAt }}
+          {{ formatToYyyyMMDd(new Date(todo.deadlineAt)) }}
         </div>
         <p v-else>" "</p>
         <TodoIconBox
+          :todo-id="todo.id"
           :uncheck="uncheck"
           :check="check"
           :square-edit="squareEdit"
           :trash-can="trashCan"
+          :refresh="refreshTodoList"
         />
       </div>
     </div>

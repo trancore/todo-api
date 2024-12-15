@@ -14,17 +14,20 @@
 | stylelint                  | ^16.9.0    | CSSのLinter                                      |
 | prettier                   | ^3.3.3     | コードformatter                                  |
 | date-fns                   | ^4.1.0     | 時間用ライブラリ                                 |
+| Prism                      | ^4.1.0     | APIサーバーモック用ライブラリ                    |
 
 ## yarn scripts について
 
-| script        | 内容                                             |
-| ------------- | ------------------------------------------------ |
-| `build`       | Nuxt アプリケーションのビルド                    |
-| `dev`         | 開発環境でのサーバーの起動                       |
-| `preview`     | build コマンドで生成した成果物でのサーバーの起動 |
-| `postinstall` | 本番環境でのサーバーの起動                       |
-| `lint`        | eslint によるコードチェック                      |
-| `lint:fix`    | eslint によるコードチェックと自動修正            |
+| script                      | 内容                                             |
+| --------------------------- | ------------------------------------------------ |
+| `build`                     | Nuxt アプリケーションのビルド                    |
+| `dev`                       | 開発環境でのサーバーの起動                       |
+| `preview`                   | build コマンドで生成した成果物でのサーバーの起動 |
+| `postinstall`               | 本番環境でのサーバーの起動                       |
+| `lint`                      | eslint によるコードチェック                      |
+| `lint:fix`                  | eslint によるコードチェックと自動修正            |
+| `generate:swagger-type:api` | swaggerから型定義ファイルを生成                  |
+| `mock`                      | API mockサーバーの起動                           |
 
 <!-- | `format`                | prettier の実行                        |
 | `lint`                  | eslint の実行                          |
@@ -125,41 +128,34 @@ tailwindCSSやMaterialUIなど何らかのCSSフレームワークを使って�
 
 React-Hooks-Form と yup の実装は、[src/pages/register/index.tsx](/apps/front/todo-nextjs/src/pages/register/index.tsx)を参考にしてください。 --> -->
 
-##### Pinia による状態管理
+##### [Pinia](https://pinia.vuejs.org/introduction.html)による状態管理
 
-<!-- [Redux](https://redux.js.org/introduction/getting-started)は以下のデータフローによって状態を管理しています。
+Nuxt.jsでは、状態管理ライブラリに[Pinia](https://nuxt.com/docs/getting-started/state-management#usage-with-pinia)を紹介しています。
 
-![データフロー図](https://redux.js.org/assets/images/ReduxDataFlowDiagram-49fa8c3968371d9ef6f2a1486bd40a26.gif)
+Pniaはcomposition APIと親和性が高く、component/page間でグローバルにデータを保持することができます。また、SSRにも対応しており、fetchと組み合わせることで、キャッシュを実現することも可能です。
 
-詳しい説明は公式ドキュメントを参考していただきたいですが、
+Piniaによる状態管理の実装は簡単です。  
+storesディレクトリに各storeごとのファイルを作成し、そのファイルにstoreを定義していきます。状態を持つロジックという意味では`composables`として定義してしまうかもしれませんが、このロジックはあくまでも状態を変えるためにのみ使われるのでstoreとして定義した方が良いかと思います。
+storeの定義には、保持する状態である`state`と、その状態に対してどのような操作を行うのかを`actions`を定義します。  
+状態を使用したい場合は、component/pageでcomposable APIのようにstoreを呼び出します。
 
-1. 何らかのイベントなどによって
-2. Dispatch を呼び出し
-3. Action によって、どのような Store の更新を行うかを選択し
-4. Reducer で Store の内容を更新し、
-5. 各画面(UI)で取得している Store 情報が更新される
+##### fetch とキャッシュ保持
 
-かと思います。
+Nuxt.jsではbuilt-inの`useFetch`, `useAsyncData`, `$fetch`があります。
 
-現在の Redux では、`slice`によって`state`, `reducer`, `action`を定義してしまいます（[定義の例](/apps/front/todo-nextjs/src/features)）。これらを`reducer`として`Store`に登録しています（[登録の例](/apps/front/todo-nextjs/src/store/root.ts)）。
+https://nuxt.com/docs/getting-started/data-fetching
 
-そして、上記で定義した`Store`や`State`の情報を型情報として持つために、`dispatch`, `Store`を取得するための`hooks`を作成しています（[hooks の例](/apps/front/todo-nextjs/src/hooks/useRedux.ts)）。
+> Nuxtは、サーバーとクライアントの両方の環境でisomorphic（またはuniversal）のコードを実行できるフレームワークです。Vueコンポーネントの`setup`関数で`$fetch`関数を使用してデータフェッチを実行すると、データが2回 fetchされる可能性があります。1回目はserverで（HTMLをレンダリングするために）、もう2回目はclientで（HTMLがハイドレートされるときに）です。これは、hydrationの問題を引き起こし、インタラクティブになるまでの時間を増加させ、予測不可能な動作を引き起こす可能性があります。  
+> `useFetch`および`useAsyncData`コンポーザブルは、server上でAPI呼び出しが行われた場合、データがペイロードでクライアントに転送されるようにすることで、この問題を解決しています。  
+> ペイロードは、`useNuxtApp().payload`を通じてアクセス可能なJavaScriptオブジェクトです。これは、hydration中にブラウザでコードが実行されたときに、同じデータの再fetchを避けるためにクライアントで使用されます。
 
-##### RTK Query を使った fetch とキャッシュ保持
+上記より、イベントによってデータフェッチを実行する必要がある場合は`$fetch`、serverやclientで呼び出す場合は`useFetch`や`useAsyncData`を用いるのが良いです。
 
-[RTK Query](https://redux.js.org/introduction/getting-started)は、fetch したデータを上記の store 機構を使ってキャッシュを保持しているのではないか、と思う。。（ここは、公式ドキュメントを確認する）。
+では、`useFetch`と`useAsyncData`はどのような違いがあるのでしょうか。  
+`useFetch`は、`$fetch`をラップしたもので、SSRでも安全なネットワーク呼び出しを行うことができます。  
+一方で、`useAsyncData`は非同期ロジックをラップし、それが解決したら結果を返すcomposableです。とすると、`useAsyncData`はどのような時に使えば良いのか？となります。たとえば、CMSやサードパーティが独自のクエリレイヤーを提供している場合などに使われます。
 
-特に何も設定しなければ、RTK Query は fetch ライブラリを wrap しており、このライブラリを fetcher としています。もちろん、axios を fetcher として設定することもできます（[Axios の設定例](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#axios-basequery)）。
-
-fetch した情報をキャッシュに保持するには、`services`として fetch するエンドポイントや`header`の設定を行います([services の定義例](/apps/front/todo-nextjs/src/services/todo.ts))。この services を store に登録します([store への登録例](/apps/front/todo-nextjs/src/store/root.ts))。
-
-SSR で使う場合は、[next-redux-wrapper](https://github.com/kirill-konshin/next-redux-wrapper)を使う[方法が公式で説明されています](https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering)。
-
-mutation によって情報の削除や更新を行った場合、store に保持しているキャッシュも同様に更新を行う必要があります。データ連携をするには、[RTK Query - Automated re-fetching](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching)の章に説明されていますが、cache tag を使うと良いみたいです。
-
-しかし本アプリで使用したところ、Todo を完了した後に Todo 取得 API を再度 call しても、完了状態前の Todo を取得してきてしまい、情報の更新が行えませんでした。
-
-そのため、action が実行された後に処理を行う onQueryStarted メソッドを使用しました。そのメソッド内で、キャッシュに保存している Todo を完了状態にした Todo の ID でフィルタし、キャッシュの更新を行っています。 -->
+本アプリでは、Todo APIを呼び出すcomposableを作成しています。
 
 ##### fetch のエラーハンドリング
 

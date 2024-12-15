@@ -1,12 +1,6 @@
 ﻿<script setup lang="ts">
-type Props = {
-  openedMenu: boolean;
-  openedTodoDetailModal: boolean;
-  openedTodoEditModal: boolean;
-};
-
-const { openedMenu, openedTodoDetailModal, openedTodoEditModal } =
-  defineProps<Props>();
+const menuStore = useMenuStore();
+const modalStore = useModalStore();
 
 const todo1 = {
   title: 'test',
@@ -21,14 +15,9 @@ const todo2 = {
 
 <template>
   <div>
-    <Menu
-      v-if="openedMenu"
-      user-name="username"
-      :sign-out="() => {}"
-      :close-menu="() => {}"
-    />
+    <Menu v-if="menuStore.isOpen" user-name="username" :sign-out="() => {}" />
     <ModalTodoDetail
-      v-if="openedTodoDetailModal"
+      v-if="modalStore.isOpenDetail"
       :todo="todo1"
       :locate-completed="true"
       :disabled="{
@@ -42,7 +31,7 @@ const todo2 = {
       }"
     />
     <ModalTodoEdit
-      v-if="openedTodoEditModal"
+      v-if="modalStore.isOpenEdit"
       :todo="todo2"
       :event="{
         onClickEdit: () => {},

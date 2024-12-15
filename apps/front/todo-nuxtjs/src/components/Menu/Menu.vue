@@ -2,10 +2,11 @@
 type Props = {
   userName: string;
   signOut: () => void;
-  closeMenu: () => void;
 };
 
 defineProps<Props>();
+
+const menuStore = useMenuStore();
 </script>
 
 <template>
@@ -16,7 +17,7 @@ defineProps<Props>();
       </div>
       <div class="menu-content-box">
         <div class="menu-content-list">
-          <NuxtLink ref="/completed" :on-click="closeMenu">
+          <NuxtLink href="/completed" @click="menuStore.toggle">
             <h3>完了済TODO</h3>
           </NuxtLink>
         </div>
@@ -30,7 +31,7 @@ defineProps<Props>();
         />
       </div>
     </div>
-    <div id="outer-menu" class="outer-menu" :on-click="closeMenu"></div>
+    <div id="outer-menu" class="outer-menu" @click="menuStore.toggle"></div>
   </div>
 </template>
 

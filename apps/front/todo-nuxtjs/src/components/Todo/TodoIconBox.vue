@@ -1,12 +1,12 @@
 ﻿<script setup lang="ts">
 type Props = {
+  todoId: number;
   uncheck?: {
     has: boolean;
     click: () => void;
   };
   check?: {
     has: boolean;
-    click: (event: PointerEvent) => void;
   };
   squareEdit?: {
     has: boolean;
@@ -16,9 +16,31 @@ type Props = {
     has: boolean;
     click: () => void;
   };
+  refresh: (opts?: { dedupe?: 'cancel' | 'defer' }) => Promise<void>;
 };
 
-const { uncheck, check, squareEdit, trashCan } = defineProps<Props>();
+const { todoId, uncheck, check, squareEdit, trashCan, refresh } =
+  defineProps<Props>();
+
+const { execute: postTodosTodoidStatus } = await useApiClient(
+  '/todos/{todo_id}/status',
+  {
+    method: 'put',
+    params: {
+      todo_id: String(todoId),
+    },
+    body: {
+      status: 'DONE',
+    },
+    server: false,
+    immediate: false,
+  },
+);
+
+const clickCheck = async () => {
+  await postTodosTodoidStatus();
+  setTimeout(() => refresh(), 100);
+};
 </script>
 
 <template>
@@ -29,7 +51,7 @@ const { uncheck, check, squareEdit, trashCan } = defineProps<Props>();
       :size="48"
       :click-icon="uncheck.click"
     />
-    <Icon v-if="check?.has" name="Check" :size="48" :click-icon="check.click" />
+    <Icon v-if="check?.has" name="Check" :size="48" :click-icon="clickCheck" />
     <Icon
       v-if="squareEdit?.has"
       name="SquareEdit"

@@ -1,21 +1,11 @@
 <script setup lang="ts">
-const { data: todoList } = await useApiClient('/todos', {
-  method: 'get',
-  query: {
-    status: 'WIP,TODO',
-  },
-});
-const { execute: postTodoTodoidStatus } = await useApiClient(
-  '/todos/{todo_id}/status',
+const { data: todoList, refresh: refreshTodoList } = await useApiClient(
+  '/todos',
   {
-    method: 'put',
-    params: {
-      todo_id: '1',
+    method: 'get',
+    query: {
+      status: 'WIP,TODO',
     },
-    body: {
-      status: 'DONE',
-    },
-    immediate: false,
   },
 );
 
@@ -27,9 +17,6 @@ const uncheck = {
 };
 const check = {
   has: true,
-  click: async (event: PointerEvent) => {
-    await postTodoTodoidStatus();
-  },
 };
 const squareEdit = {
   has: true,
@@ -65,10 +52,12 @@ const trashCan = {
         </div>
         <p v-else>" "</p>
         <TodoIconBox
+          :todo-id="todo.id"
           :uncheck="uncheck"
           :check="check"
           :square-edit="squareEdit"
           :trash-can="trashCan"
+          :refresh="refreshTodoList"
         />
       </div>
     </div>

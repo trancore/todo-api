@@ -35,13 +35,13 @@ const defineUseApiClient = <Endpoints extends Record<string, any>>() => {
     });
     const method = computed(() => options.method);
 
-    const { data, error, execute } = await useFetch(requestUrl.value, {
+    const { data, error, execute, refresh } = await useFetch(requestUrl.value, {
       ...options,
       method,
       $fetch: useNuxtApp().$api,
     });
 
-    return { data, error, execute };
+    return { data, error, execute, refresh };
   };
 };
 

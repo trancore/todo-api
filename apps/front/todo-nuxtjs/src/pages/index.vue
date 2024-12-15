@@ -5,6 +5,20 @@ const { data: todoList } = await useApiClient('/todos', {
     status: 'WIP,TODO',
   },
 });
+const { execute: postTodoTodoidStatus } = await useApiClient(
+  '/todos/{todo_id}/status',
+  {
+    method: 'put',
+    params: {
+      todo_id: '1',
+    },
+    body: {
+      status: 'DONE',
+    },
+    immediate: false,
+  },
+);
+
 const { toggleDetail } = useModalStore();
 
 const uncheck = {
@@ -13,7 +27,9 @@ const uncheck = {
 };
 const check = {
   has: true,
-  click: () => {},
+  click: async (event: PointerEvent) => {
+    await postTodoTodoidStatus();
+  },
 };
 const squareEdit = {
   has: true,
@@ -27,7 +43,12 @@ const trashCan = {
 
 <template>
   <div v-if="todoList" class="todo-list">
-    <div v-for="todo in todoList" id="todo" :key="todo.id" class="todo">
+    <div
+      v-for="todo in todoList"
+      :id="String(todo.id)"
+      :key="todo.id"
+      class="todo"
+    >
       <TodoEclipse
         :title="todo.title"
         :description="todo.description"
@@ -36,7 +57,7 @@ const trashCan = {
       <div class="todo-under">
         <div
           v-if="todo.deadlineAt"
-          id="todo-deadline"
+          :id="`todo-deadline-${todo.id}`"
           class="todo-deadline-at"
           :style="{ color: colorizeDate(new Date(todo.deadlineAt)) }"
         >

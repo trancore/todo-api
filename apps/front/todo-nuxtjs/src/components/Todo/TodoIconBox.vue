@@ -6,7 +6,7 @@ type Props = {
   };
   check?: {
     has: boolean;
-    click: () => void;
+    click: (event: PointerEvent) => void;
   };
   squareEdit?: {
     has: boolean;

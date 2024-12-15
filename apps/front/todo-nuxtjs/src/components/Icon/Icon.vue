@@ -31,7 +31,7 @@ type Props = {
   name: IconName;
   size: Size;
   color?: string;
-  clickIcon?: () => void;
+  clickIcon?: (event: PointerEvent) => void;
 };
 
 const { name, clickIcon } = defineProps<Props>();

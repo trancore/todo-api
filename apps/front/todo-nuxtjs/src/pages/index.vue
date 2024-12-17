@@ -20,11 +20,9 @@ const check = {
 };
 const squareEdit = {
   has: true,
-  click: () => {},
 };
 const trashCan = {
   has: true,
-  click: () => {},
 };
 </script>
 

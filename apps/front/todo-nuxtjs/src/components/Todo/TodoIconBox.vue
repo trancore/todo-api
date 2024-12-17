@@ -13,7 +13,6 @@ type Props = {
   };
   trashCan?: {
     has: boolean;
-    click: () => void;
   };
   refresh: (opts?: { dedupe?: 'cancel' | 'defer' }) => Promise<void>;
 };
@@ -21,20 +20,33 @@ type Props = {
 const { todoId, uncheck, check, squareEdit, trashCan, refresh } =
   defineProps<Props>();
 
-const [{ execute: putTodosTodoidStatus }] = await Promise.all([
-  useApiClient('/todos/{todo_id}/status', {
-    method: 'put',
-    params: {
-      todo_id: String(todoId),
-    },
-    body: {
-      status: 'DONE',
-    },
-    server: false,
-    immediate: false,
-  }),
-]);
+const [{ execute: putTodosTodoidStatus }, { execute: deleteTodosTodoid }] =
+  await Promise.all([
+    useApiClient('/todos/{todo_id}/status', {
+      method: 'put',
+      params: {
+        todo_id: String(todoId),
+      },
+      body: {
+        status: 'DONE',
+      },
+      server: false,
+      immediate: false,
+    }),
+    useApiClient('/todos/{todo_id}', {
+      method: 'delete',
+      params: {
+        todo_id: String(todoId),
+      },
+      server: false,
+      immediate: false,
+    }),
+  ]);
 const clickCheck = async () => {
+  await deleteTodosTodoid();
+  setTimeout(() => refresh(), 100);
+};
+const clickTrashCan = async () => {
   await putTodosTodoidStatus();
   setTimeout(() => refresh(), 100);
 };
@@ -64,7 +76,7 @@ const clickEdit = async () => {
       v-if="trashCan?.has"
       name="TrashCan"
       :size="48"
-      :click-icon="trashCan.click"
+      :click-icon="clickTrashCan"
     />
   </div>
 </template>

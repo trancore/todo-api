@@ -20,34 +20,38 @@ type Props = {
 const { todoId, uncheck, check, squareEdit, trashCan, refresh } =
   defineProps<Props>();
 
-const [{ execute: putTodosTodoidStatus }, { execute: deleteTodosTodoid }] =
-  await Promise.all([
-    useApiClient('/todos/{todo_id}/status', {
-      method: 'put',
-      params: {
-        todo_id: String(todoId),
-      },
-      body: {
-        status: 'DONE',
-      },
-      server: false,
-      immediate: false,
-    }),
-    useApiClient('/todos/{todo_id}', {
-      method: 'delete',
-      params: {
-        todo_id: String(todoId),
-      },
-      server: false,
-      immediate: false,
-    }),
-  ]);
+const [
+  { execute: putTodosTodoidStatus },
+  { execute: deleteTodosTodoid, error: errorDeleteTodosTodoid },
+] = await Promise.all([
+  useApiClient('/todos/{todo_id}/status', {
+    method: 'put',
+    params: {
+      todo_id: String(todoId),
+    },
+    body: {
+      status: 'DONE',
+    },
+    server: false,
+    immediate: false,
+  }),
+  useApiClient('/todos/{todo_id}', {
+    method: 'delete',
+    params: {
+      todo_id: String(todoId),
+    },
+    server: false,
+    immediate: false,
+  }),
+]);
 const clickCheck = async () => {
-  await deleteTodosTodoid();
+  await putTodosTodoidStatus();
   setTimeout(() => refresh(), 100);
 };
 const clickTrashCan = async () => {
-  await putTodosTodoidStatus();
+  await deleteTodosTodoid();
+  if (errorDeleteTodosTodoid.value) {
+  }
   setTimeout(() => refresh(), 100);
 };
 

@@ -1,6 +1,6 @@
 ﻿export const useErrorStore = defineStore('errorStore', () => {
-  const errorMessage = ref('');
-  const isOpen = ref(false);
+  const errorMessage = ref<string>('');
+  const isOpen = ref<boolean>(false);
 
   function setMesasge(message: string) {
     errorMessage.value = message;
@@ -16,5 +16,5 @@
     isOpen.value = !isOpen.value;
   }
 
-  return { isOpen, openErrorMessage, clearErrorMessage };
+  return { errorMessage, isOpen, openErrorMessage, clearErrorMessage };
 });

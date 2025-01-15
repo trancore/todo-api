@@ -1,15 +1,20 @@
 <script setup lang="ts">
-const { data: todoList, refresh: refreshTodoList } = await useApiClient(
-  '/todos',
-  {
-    method: 'get',
-    query: {
-      status: 'WIP,TODO',
-    },
+const {
+  data: todoList,
+  error,
+  refresh: refreshTodoList,
+} = await useApiClient('/todos', {
+  method: 'get',
+  query: {
+    status: 'WIP,TODO',
   },
-);
+});
 
 const { toggleDetail } = useModalStore();
+
+if (error.value) {
+  // TODO エラー画面
+}
 
 const uncheck = {
   has: true,
